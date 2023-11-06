@@ -57,7 +57,6 @@ public class UserServiceImp implements UserService {
         //String password = bCryptPasswordEncoder.encode(signupDTO.getPassword());
         user.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
         user.setRole("ROLE_USER");
-        user.setAvatar("");
         user.setEnable(false);
         user.setVerificationCode(UUID.randomUUID().toString());
         User newuser = userRepo.save(user);

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OnlineUserDto {
-    private Long userId;
+    private Long id;
     private String sessionId;
     private String name;
     private Integer noOfNewMessages;

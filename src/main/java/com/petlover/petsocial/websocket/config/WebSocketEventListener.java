@@ -61,11 +61,8 @@ public class WebSocketEventListener {
         StompHeaderAccessor stompAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = stompAccessor.getSessionId();
         //System.out.println(sessionId);
-        OnlineUserDto offlineUsr = this.onlineUsrs
-                .stream()
-                .filter((a)->a.getSessionId().equals(sessionId))
-                .collect(Collectors.toList()).get(0);
-        this.onlineUsrs.remove(offlineUsr);
+        this.onlineUsrs.removeIf(user -> user.getSessionId().equals(sessionId));
+
     }
 
 }

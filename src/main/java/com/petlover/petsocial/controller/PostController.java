@@ -49,7 +49,7 @@ public class PostController {
         UserDTO userDTO = userService.findUserProfileByJwt(jwt);
         PostDTO postDTO = postService.insertPost(creatPostDTO,userDTO);
         if(postDTO==null) {
-            responseData.setData("Erorr: not fill content");
+            throw new PostException("Erorr: not fill content");
         }
         responseData.setData(postDTO);
         return new ResponseEntity<>(responseData,HttpStatus.OK);
@@ -74,7 +74,7 @@ public class PostController {
         return new ResponseEntity<>(responseData,HttpStatus.OK);
     }
 
-    @DeleteMapping ("/delete/{id}")
+    @PostMapping ("/delete/{id}")
     public ResponseEntity<?> deletePost(@PathVariable(value = "id") Long id,@RequestHeader("Authorization") String jwt) throws UserException, PostException {
         ResponseData responseData = new ResponseData();
         UserDTO userDTO = userService.findUserProfileByJwt(jwt);

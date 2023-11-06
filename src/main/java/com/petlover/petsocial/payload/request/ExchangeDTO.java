@@ -18,4 +18,6 @@ public class ExchangeDTO {
     private UserDTO userDTO;
     private PetDTO petDTO;
     private String description;
+
+
 }

@@ -44,58 +44,61 @@ import java.util.List;
 @RestController
 
 public class HomeController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private UserRepository userRepo;
-    @Autowired
-    private JavaMailSender mailSender;
-    @Autowired
-    HttpSession session;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private JwtProvider jwtProvider;
-    @Autowired
-    private CustomerUserDetailsServiceImp customerUserDetailsServiceImp;
-    @Autowired
-    private PostService postService;
+
+  @Autowired
+  private UserService userService;
+  @Autowired
+  private UserRepository userRepo;
+  @Autowired
+  private JavaMailSender mailSender;
+  @Autowired
+  HttpSession session;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+  @Autowired
+  private JwtProvider jwtProvider;
+  @Autowired
+  private CustomerUserDetailsServiceImp customerUserDetailsServiceImp;
+  @Autowired
+  private PostService postService;
 
 
-   @ModelAttribute
-   public void commonUser(Principal p, Model m,@AuthenticationPrincipal OAuth2User usero2) {
-       if (p != null) {
-           String email = p.getName();
-           User user = userRepo.findByEmail(email);
-           m.addAttribute("user", user);
-       }
-       if(usero2 != null) {
-           String email = usero2.getAttribute("email");
-           User user = userRepo.findByEmail(email);
-           m.addAttribute("user", user);
-       }
-   }
-
-
-    @GetMapping("/")
-    public String index() {
-        return "index";
+  @ModelAttribute
+  public void commonUser(Principal p, Model m, @AuthenticationPrincipal OAuth2User usero2) {
+    if (p != null) {
+      String email = p.getName();
+      User user = userRepo.findByEmail(email);
+      m.addAttribute("user", user);
     }
-
-    @GetMapping("/signin")
-    public String login() {
-        return "login";
+    if (usero2 != null) {
+      String email = usero2.getAttribute("email");
+      User user = userRepo.findByEmail(email);
+      m.addAttribute("user", user);
     }
+  }
 
-    @GetMapping("/register")
-    public String register() {
-        return "register";
-    }
+
+  @GetMapping("/")
+  public String index() {
+    return "index";
+  }
+
+  @GetMapping("/signin")
+  public String login() {
+    return "login";
+  }
+
+  @GetMapping("/register")
+  public String register() {
+    return "register";
+  }
 
   @PostMapping("/createUser")
-  public ResponseEntity<?> createuser(@RequestBody SingupDTO userDTO, HttpSession session, HttpServletRequest request) throws UserException {
+  public ResponseEntity<?> createuser(@RequestBody SingupDTO userDTO, HttpSession session,
+      HttpServletRequest request) throws UserException {
     String url = request.getRequestURL().toString();
-    http://localhost:8080/createUser
+    http:
+//localhost:8080/createUser
     url = url.replace(request.getServletPath(), "");
     System.out.println(userDTO);
     boolean f = userService.checkEmail(userDTO.getEmail());
@@ -105,11 +108,12 @@ public class HomeController {
       responseData.setIsSuccess(false);
     } else {
 
-      SingupDTO userDtls = userService.createUser(userDTO,url);
-      Authentication authentication = new UsernamePasswordAuthenticationToken(userDTO.getEmail(),userDTO.getPassword());
+      SingupDTO userDtls = userService.createUser(userDTO, url);
+      Authentication authentication = new UsernamePasswordAuthenticationToken(userDTO.getEmail(),
+          userDTO.getPassword());
       SecurityContextHolder.getContext().setAuthentication(authentication);
       String token = jwtProvider.generateToken(authentication);
-      AuthResponse res = new AuthResponse(token ,true,null);
+      AuthResponse res = new AuthResponse(token, true, null);
 
       responseData.setData(res);
 
@@ -117,33 +121,34 @@ public class HomeController {
 
     return new ResponseEntity<>(responseData.getIsSuccess(), HttpStatus.CREATED);
   }
-    @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestBody SigninDTO signinDTO) throws UserException{
-        ResponseData responseData = new ResponseData();
-        //SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        // String encrypted = Encoders.BASE64.encode(secretKey.getEncoded());
-        //System.out.println(encrypted);
 
-        System.out.println(signinDTO);
+  @PostMapping("/signin")
+  public ResponseEntity<?> signin(@RequestBody SigninDTO signinDTO) throws UserException {
+    ResponseData responseData = new ResponseData();
+    //SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // String encrypted = Encoders.BASE64.encode(secretKey.getEncoded());
+    //System.out.println(encrypted);
+
+    System.out.println(signinDTO);
 //    String token = jwtUtilHelper.generateToken(signinDTO.getUsername());
 //    System.out.println(token);
 
 //    responseData.setDescription(res.toString());
-        String userLogin =  userService.checkLogin(signinDTO);
-        if(userLogin.equals("Incorrect username or password")){
-            responseData.setData("Incorrect");
-        }else if(userLogin.equals("Your account has not been activated!")){
-            responseData.setData("Activated");
-        }else {
+    String userLogin = userService.checkLogin(signinDTO);
+    if (userLogin.equals("Incorrect username or password")) {
+      responseData.setData("Incorrect");
+    } else if (userLogin.equals("Your account has not been activated!")) {
+      responseData.setData("Activated");
+    } else {
 //      responseData.setToken(token);
 //      responseData.setData(res);
-            Authentication authentication = authenticate(signinDTO.getEmail(), signinDTO.getPassword());
-            String token = jwtProvider.generateToken(authentication);
-            AuthResponse res = new AuthResponse(token, true, null);
-            System.out.println(token);
-            responseData.setData(token);
+      Authentication authentication = authenticate(signinDTO.getEmail(), signinDTO.getPassword());
+      String token = jwtProvider.generateToken(authentication);
+      AuthResponse res = new AuthResponse(token, true, null);
+      System.out.println(token);
+      responseData.setData(token);
 
-        }
+    }
 //        if(userService.checkLogin(signinDTO)){
 //            String token = jwtUtilHelper.generateToken(signinDTO.getUsername());
 //            responseData.setData(token);
@@ -155,141 +160,148 @@ public class HomeController {
 //            responseData.setIsSuccess(false);
 //        }
 
-        return new ResponseEntity<>(responseData.getData(), HttpStatus.OK);
-    }
-    private Authentication authenticate( String username, String password) {
-        UserDetails userDetails = customerUserDetailsServiceImp.loadUserByUsername(username);
-        if(userDetails==null) {
-            throw new BadCredentialsException("Invalid username..");
+    return new ResponseEntity<>(responseData.getData(), HttpStatus.OK);
+  }
 
-        }
-        if(!passwordEncoder.matches(password,userDetails.getPassword())){
-            throw new BadCredentialsException("Invalid username or password..");
-        }
-        return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-    }
-    @GetMapping("/verify")
-    public String verifyAccount(@Param("code") String code) {
-        boolean f = userService.verifyAccount(code);
-
-        if (f) {
-            return "You can login. Sucessfully your account is verified";
-        } else {
-           return  "May be your vefication code is incorrect or already veified ";
-        }
-
+  private Authentication authenticate(String username, String password) {
+    UserDetails userDetails = customerUserDetailsServiceImp.loadUserByUsername(username);
+    if (userDetails == null) {
+      throw new BadCredentialsException("Invalid username..");
 
     }
+    if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+      throw new BadCredentialsException("Invalid username or password..");
+    }
+    return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+  }
 
-    @GetMapping("/getAllPost")
-    public ResponseEntity<?> getAllPost() throws UserException {
-        ResponseData responseData = new ResponseData();
+  @GetMapping("/verify")
+  public String verifyAccount(@Param("code") String code) {
+    boolean f = userService.verifyAccount(code);
 
-        List<PostDTO> list = postService.getAllPostHome();
-        responseData.setData(list);
-        return new ResponseEntity<>(responseData,HttpStatus.OK);
+    if (f) {
+      return "You can login. Sucessfully your account is verified";
+    } else {
+      return "May be your vefication code is incorrect or already veified ";
     }
 
-    @GetMapping("/getAllUser")
-    public ResponseEntity<?> getAllUser(){
-        ResponseData responseData = new ResponseData();
-        List<UserHomeDTO> list = userService.getListUser();
-        responseData.setData(list);
-        return new ResponseEntity<>(responseData,HttpStatus.OK);
-    }
 
-    @GetMapping("/searchUser")
-    public ResponseEntity<?> searchUser(@RequestParam("name") String name) throws UserException, PostException {
-        ResponseData responseData = new ResponseData();
-        List<UserHomeDTO> list = userService.getSearchListUser(name);
-        responseData.setData(list);
-        return new ResponseEntity<>(responseData,HttpStatus.OK);
-    }
-    @GetMapping("/searchPost")
-    public ResponseEntity<?> searchPost(@RequestParam("content") String content) throws UserException, PostException {
-        ResponseData responseData = new ResponseData();
+  }
 
-        List<PostDTO> list = postService.sreachPostHome(content);
-        responseData.setData(list);
-        return new ResponseEntity<>(responseData,HttpStatus.OK);
+  @GetMapping("/getAllPost")
+  public ResponseEntity<?> getAllPost() throws UserException {
+    ResponseData responseData = new ResponseData();
 
-    }
-    @PostMapping("/forgot_password")
-    public ResponseEntity<?> processForgotPassword(@RequestBody ForgotPasswordDTO forgotPasswordDTO,HttpServletRequest request) {
-        String token = RandomString.make(30);
+    List<PostDTO> list = postService.getAllPostHome();
+    responseData.setData(list);
+    return new ResponseEntity<>(responseData, HttpStatus.OK);
+  }
 
+  @GetMapping("/getAllUser")
+  public ResponseEntity<?> getAllUser() {
+    ResponseData responseData = new ResponseData();
+    List<UserHomeDTO> list = userService.getListUser();
+    responseData.setData(list);
+    return new ResponseEntity<>(responseData, HttpStatus.OK);
+  }
 
-        try {
-            userService.updateResetPasswordToken(token,forgotPasswordDTO.getEmail());
-            System.out.println("Email: " + forgotPasswordDTO.getEmail());
-            System.out.println("Token: " + token);
-            String url = request.getRequestURL().toString();
-            url = url.replace(request.getServletPath(), "")  + "/reset_password?token=" + token;
-            System.out.println(url);
+  @GetMapping("/searchUser")
+  public ResponseEntity<?> searchUser(@RequestParam("name") String name)
+      throws UserException, PostException {
+    ResponseData responseData = new ResponseData();
+    List<UserHomeDTO> list = userService.getSearchListUser(name);
+    responseData.setData(list);
+    return new ResponseEntity<>(responseData, HttpStatus.OK);
+  }
+
+  @GetMapping("/searchPost")
+  public ResponseEntity<?> searchPost(@RequestParam("content") String content)
+      throws UserException, PostException {
+    ResponseData responseData = new ResponseData();
+
+    List<PostDTO> list = postService.sreachPostHome(content);
+    responseData.setData(list);
+    return new ResponseEntity<>(responseData, HttpStatus.OK);
+
+  }
+
+  @PostMapping("/forgot_password")
+  public ResponseEntity<?> processForgotPassword(@RequestBody ForgotPasswordDTO forgotPasswordDTO,
+      HttpServletRequest request) {
+    String token = RandomString.make(30);
+
+    try {
+      userService.updateResetPasswordToken(token, forgotPasswordDTO.getEmail());
+      System.out.println("Email: " + forgotPasswordDTO.getEmail());
+      System.out.println("Token: " + token);
+      String url = request.getRequestURL().toString();
+      url = url.replace(request.getServletPath(), "") + "/reset_password?token=" + token;
+      System.out.println(url);
 //            String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password?token=" + token;
-            sendEmail(forgotPasswordDTO.getEmail(), url);
+      sendEmail(forgotPasswordDTO.getEmail(), url);
 
 //
-        } catch (UserNotFoundException ex) {
-            return new ResponseEntity<>("Error not found",HttpStatus.NOT_FOUND);
-        } catch (UnsupportedEncodingException | MessagingException e) {
-            return new ResponseEntity<>("Error",HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(token,HttpStatus.OK);
+    } catch (UserNotFoundException ex) {
+      return new ResponseEntity<>("Error not found", HttpStatus.NOT_FOUND);
+    } catch (UnsupportedEncodingException | MessagingException e) {
+      return new ResponseEntity<>("Error", HttpStatus.NOT_FOUND);
     }
 
-    public void sendEmail(String recipientEmail, String link)
-            throws MessagingException, UnsupportedEncodingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+    return new ResponseEntity<>(token, HttpStatus.OK);
+  }
 
-        helper.setFrom("phucvinh710@gmail.com", "Pet Social Media Support Reset Password");
-        helper.setTo(recipientEmail);
+  public void sendEmail(String recipientEmail, String link)
+      throws MessagingException, UnsupportedEncodingException {
+    MimeMessage message = mailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        String subject = "Here's the link to reset your password";
+    helper.setFrom("phucvinh710@gmail.com", "Pet Social Media Support Reset Password");
+    helper.setTo(recipientEmail);
 
-        String content = "<p>Hello,</p>"
-                + "<p>You have requested to reset your password.</p>"
-                + "<p>Click the link below to change your password:</p>"
-                + "<p><a href=\"" + link + "\">Change my password</a></p>"
-                + "<br>"
-                + "<p>Ignore this email if you do remember your password, "
-                + "or you have not made the request.</p>";
+    String subject = "Here's the link to reset your password";
 
-        helper.setSubject(subject);
+    String content = "<p>Hello,</p>"
+        + "<p>You have requested to reset your password.</p>"
+        + "<p>Click the link below to change your password:</p>"
+        + "<p><a href=\"" + link + "\">Change my password</a></p>"
+        + "<br>"
+        + "<p>Ignore this email if you do remember your password, "
+        + "or you have not made the request.</p>";
 
-        helper.setText(content, true);
+    helper.setSubject(subject);
 
-        mailSender.send(message);
-    }
-    @GetMapping("/reset_password")
-    public String showResetPasswordForm(@Param(value = "token") String token) {
-        User user = userService.getByResetPasswordToken(token);
-        if (user == null) {
+    helper.setText(content, true);
 
-            return "Invalid Token";
-        }
+    mailSender.send(message);
+  }
 
-        return token;
-    }
-    @PostMapping("/reset_password")
-    public String processResetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
-        String gettoken = resetPasswordDTO.getToken();
-        String pass =resetPasswordDTO.getPassword();
+  @GetMapping("/reset_password")
+  public String showResetPasswordForm(@Param(value = "token") String token) {
+    User user = userService.getByResetPasswordToken(token);
+    if (user == null) {
 
-        User user = userService.getByResetPasswordToken(gettoken);
-        if (user == null) {
-
-            return "Invalid Token";
-        } else {
-            userService.updatePassword(user, pass);
-
-        }
-
-        return "Reset password correct !";
+      return "Invalid Token";
     }
 
+    return token;
+  }
+
+  @PostMapping("/reset_password")
+  public String processResetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+    String gettoken = resetPasswordDTO.getToken();
+    String pass = resetPasswordDTO.getPassword();
+
+    User user = userService.getByResetPasswordToken(gettoken);
+    if (user == null) {
+
+      return "Invalid Token";
+    } else {
+      userService.updatePassword(user, pass);
+
+    }
+
+    return "Reset password correct !";
+  }
 
 
 }

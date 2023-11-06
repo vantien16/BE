@@ -35,7 +35,17 @@ public class SecurityConfig {
 
 
 
-
+/*
+* /swagger-ui/index.html
+/swagger-ui/swagger-ui.css
+/swagger-ui/index.css
+/swagger-ui/swagger-ui-bundle.js
+/swagger-ui/swagger-ui-standalone-preset.js
+/swagger-ui/swagger-initializer.js
+/v3/api-docs/swagger-config
+/swagger-ui/favicon-32x32.png
+/v3/api-docs
+* */
    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
    {
@@ -43,20 +53,25 @@ public class SecurityConfig {
                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
                 .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/","/register","/signin","/createUser","/oauth/**","/verify","/forgot_password","/reset_password"
-                        ,"/getAllUser","/searchUser","/searchPost","/getAllPost","/ws/**"
-
-
-                        ).permitAll().anyRequest().authenticated()).
-//                        "api/v1/**",
-//                        "/v2/api-docs",
-//                        "/v3/api-docs",
-//                        "v3/api-docs/**",
-//                        "/swagger-resources",
-//                        "/swagger-resources/**",
-//                        "/configuration/ui",
-//                        "/configuration/security",
-//                        "/swagger-ui/**",
-//                        "/webjars/**").permitAll().anyRequest().authenticated()).
+                        ,"/getAllUser","/searchUser","/searchPost","/getAllPost","/ws/**","api/v1/**",
+                                "/swagger-ui/index.html",
+                                "/swagger-ui/swagger-ui.css",
+                                "/swagger-ui/index.css",
+                                "/swagger-ui/swagger-ui-bundle.js",
+                                "/swagger-ui/swagger-ui-standalone-preset.js",
+                                "/swagger-ui/swagger-initializer.js",
+                                "/v3/api-docs/swagger-config",
+                                "/swagger-ui/favicon-32x32.png",
+                                "/v3/api-docs",
+                                "/v2/api-docs",
+                        "/swagger-resources",
+                        "/swagger-resources/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/swagger-ui/**",
+                        "/webjars/**"
+                        ).permitAll().
+                        anyRequest().permitAll()).
                    addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class).csrf().disable().cors().configurationSource(corsConfigrationSource()).and().httpBasic().and().formLogin().
 and()
                .oauth2Login()
@@ -86,7 +101,7 @@ and()
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg =  new CorsConfiguration();
-                cfg.setAllowedOrigins(Arrays.asList("https://dogcat-alpha.vercel.app"));
+                cfg.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
                 cfg.setAllowedHeaders(Collections.singletonList("*"));

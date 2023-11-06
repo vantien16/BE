@@ -25,7 +25,7 @@ public class MapperUtils {
     public static List<OnlineUserDto> mapperList(List<User> source) {
         return source.stream().map(user -> {
             OnlineUserDto onlineUserDto = new OnlineUserDto();
-            onlineUserDto.setUserId(user.getId());
+            onlineUserDto.setId(user.getId());
             onlineUserDto.setName(user.getName()); // Map username
             onlineUserDto.setStatus("OFFLINE"); // Set status as OFFLINE
             return onlineUserDto;

@@ -49,7 +49,7 @@ public class UserWSController {
             if(onlsSet!=null){
                 List<OnlineUserDto>onls = onlsSet.stream().collect(Collectors.toList());
                 onls.forEach(o->{
-                    int count = messageService.countNewMessagesFromOnlineUser(currentUserId, o.getUserId());
+                    int count = messageService.countNewMessagesFromOnlineUser(currentUserId, o.getId());
                     o.setNoOfNewMessages(count);
                     o.setStatus("ONLINE");
                 });
