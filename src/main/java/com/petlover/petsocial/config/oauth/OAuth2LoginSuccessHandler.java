@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+import static com.cloudinary.AccessControlRule.AccessType.token;
+
 @Component
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Autowired
@@ -38,14 +40,12 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         User user = userService.getUserByEmail(email);
         if(user == null){
             User user1 = userService.createUserAfterOAuthLoginSuccess(email,name, AuthenticationProvider.GOOGLE);
-            String token = jwtProvider.generateTokenLoginEMail(email);
-            System.out.println("token: " + token);
+
         }else {
             User user1 = userService.updateUserAfterOAuthLoginSuccess(user,name);
-            String token = jwtProvider.generateTokenLoginEMail(email);
-            System.out.println("token: " + token);
-
         }
+        String token = jwtProvider.generateTokenLoginEMail(email);
+        System.out.println("token: " + token);
         super.onAuthenticationSuccess(request, response, authentication);
     }
 }

@@ -74,7 +74,7 @@ public class PostController {
         return new ResponseEntity<>(responseData,HttpStatus.OK);
     }
 
-    @PostMapping ("/delete/{id}")
+    @DeleteMapping ("/delete/{id}")
     public ResponseEntity<?> deletePost(@PathVariable(value = "id") Long id,@RequestHeader("Authorization") String jwt) throws UserException, PostException {
         ResponseData responseData = new ResponseData();
         UserDTO userDTO = userService.findUserProfileByJwt(jwt);
