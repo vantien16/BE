@@ -112,7 +112,7 @@ public class HomeController {
       AuthResponse res = new AuthResponse(token ,true,null);
 
       // responseData.setData(res);
-        responseData.setData(true);
+        responseData.setData(true); 
     }
 
     return new ResponseEntity<>(responseData.getData(), HttpStatus.CREATED);
