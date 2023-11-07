@@ -102,7 +102,7 @@ public class HomeController {
     ResponseData responseData = new ResponseData();
     if (f) {
 //            throw new UserException("Email is already used with another account");
-      responseData.setIsSuccess(false);
+      responseData.setData(false);
     } else {
 
       SingupDTO userDtls = userService.createUser(userDTO,url);
@@ -111,11 +111,11 @@ public class HomeController {
       String token = jwtProvider.generateToken(authentication);
       AuthResponse res = new AuthResponse(token ,true,null);
 
-      responseData.setData(res);
-
+      // responseData.setData(res);
+        response.setData(true);
     }
 
-    return new ResponseEntity<>(responseData.getIsSuccess(), HttpStatus.CREATED);
+    return new ResponseEntity<>(responseData.getData(), HttpStatus.CREATED);
   }
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody SigninDTO signinDTO) throws UserException{
