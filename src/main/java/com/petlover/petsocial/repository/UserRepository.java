@@ -14,9 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM user u WHERE u.email = :email", nativeQuery = true)
     User findByEmail(@Param("email") String email);
 
-
-
-
     User findByVerificationCode(String code);
     User findByResetPasswordToken(String token);
 

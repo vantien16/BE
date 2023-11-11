@@ -1,15 +1,12 @@
 package com.petlover.petsocial.serviceImp;
 
-import com.petlover.petsocial.model.entity.Apply;
-import com.petlover.petsocial.model.entity.ApplyStatus;
-import com.petlover.petsocial.model.entity.Exchange;
-import com.petlover.petsocial.model.entity.User;
-import com.petlover.petsocial.payload.request.ApplyDTO;
-import com.petlover.petsocial.payload.request.UserDTO;
+import com.petlover.petsocial.model.entity.*;
+import com.petlover.petsocial.payload.request.*;
 import com.petlover.petsocial.repository.ApplyRepository;
 import com.petlover.petsocial.repository.ExchangeRepository;
 import com.petlover.petsocial.repository.UserRepository;
 import com.petlover.petsocial.service.ApplyService;
+import com.petlover.petsocial.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -129,4 +126,8 @@ public class ApplyServiceImp implements ApplyService {
         }
         return null;
     }
+
+
+
+
 }

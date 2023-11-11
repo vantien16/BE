@@ -68,8 +68,9 @@ public class ExchangeServiceImp implements ExchangeService {
     public List<ExchangeDTO> getAllExchangeToShow() {
         List<ExchangeDTO> exchangeDTOList = new ArrayList<>();
         for (Exchange exchange : exchangeRepository.getAllExchange()) {
+            if(exchange.getStatus()==ExStatus.PENDING){
             ExchangeDTO exchangeDTO = convertToDTO(exchange);
-            exchangeDTOList.add(exchangeDTO);
+            exchangeDTOList.add(exchangeDTO);}
         }
         return exchangeDTOList;
     }
@@ -108,8 +109,10 @@ public class ExchangeServiceImp implements ExchangeService {
         User user = userRepository.findById(userDTO.getId()).orElse(null);
         if (user != null) {
             for (Exchange exchange : user.getExchanges()){
-                ExchangeDTO exchangeDTO = convertToDTO(exchange);
-                exchangeList.add(exchangeDTO);
+                if(exchange.getStatus()!=ExStatus.REMOVED){
+                    ExchangeDTO exchangeDTO = convertToDTO(exchange);
+                    exchangeList.add(exchangeDTO);
+                }
             }
             return exchangeList;
         } else {

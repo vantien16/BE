@@ -45,86 +45,174 @@ public class PostServiceImp implements PostService {
 
 
             if(creatPostDTO.getFile()!=null) {
-                Pet pet = petRepository.getById(creatPostDTO.getIdPet());
-                if(pet == null) {
-                    throw new PetException("Not found Pet");
-                }
-                System.out.println(pet);
+                if(creatPostDTO.getIdPet() != null) {
+                    Pet pet = petRepository.getById(creatPostDTO.getIdPet());
+                    if(pet == null) {
+                        throw new PetException("Not found Pet");
+                    }
+                    System.out.println(pet);
 
-                try {
-                    String image = cloudinaryService.uploadFile(creatPostDTO.getFile());
-                    newPost.setImage(image);
-                }catch (Exception e){}
-                if(creatPostDTO.getContent().equals("")) {
-                    return null;
-                }
-                if(creatPostDTO.getContent()==null) {
-                    return null;
-                }
-                newPost.setContent(creatPostDTO.getContent());
-                User user = userRepo.getById(userDTO.getId());
-                newPost.setUser(user);
-                newPost.setPet(pet);
-                newPost.setStatus(true);
-                Calendar cal = Calendar.getInstance();
-                Date date = cal.getTime();
-                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-                String formattedDate = dateFormat.format(date);
-                newPost.setCreate_date(formattedDate);
-                if(!user.getRole().equals("ROLE_USER")) {
-                    newPost.setEnable(true);
+                    try {
+                        String image = cloudinaryService.uploadFile(creatPostDTO.getFile());
+                        newPost.setImage(image);
+                    }catch (Exception e){}
+                    if(creatPostDTO.getContent().equals("")) {
+                        return null;
+                    }
+                    if(creatPostDTO.getContent()==null) {
+                        return null;
+                    }
+
+                    newPost.setContent(creatPostDTO.getContent());
+                    User user = userRepo.getById(userDTO.getId());
+                    newPost.setUser(user);
+                    newPost.setPet(pet);
+                    newPost.setStatus(true);
+                    Calendar cal = Calendar.getInstance();
+                    Date date = cal.getTime();
+                    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                    String formattedDate = dateFormat.format(date);
+                    newPost.setCreate_date(formattedDate);
+                    if(!user.getRole().equals("ROLE_USER")) {
+                        newPost.setEnable(true);
+                    }else{
+                        newPost.setEnable(false);
+                    }
+                    newPost.setTotal_like(0);
+                    postRepository.save(newPost);
+                    PetToPostDTO petToPostDTO = new PetToPostDTO();
+                    petToPostDTO.setId(newPost.getPet().getId());
+                    petToPostDTO.setName(newPost.getPet().getName());
+                    petToPostDTO.setImage(newPost.getPet().getImage());
+
+
+                    UserPostDTO userPostDTO = new UserPostDTO();
+                    userPostDTO.setId(newPost.getUser().getId());
+                    userPostDTO.setName(newPost.getUser().getName());
+                    userPostDTO.setAvatar(newPost.getUser().getAvatar());
+
+                    return new PostDTO(newPost.getId(),newPost.getImage(),newPost.getContent(),newPost.getCreate_date(),newPost.getTotal_like(), newPost.getTotal_comment(), commentService.convertCommentListToDTO(newPost.getComments()),petToPostDTO,userPostDTO,false);
                 }else{
-                    newPost.setEnable(false);
+                    try {
+                        String image = cloudinaryService.uploadFile(creatPostDTO.getFile());
+                        newPost.setImage(image);
+                    }catch (Exception e){}
+                    if(creatPostDTO.getContent().equals("")) {
+                        return null;
+                    }
+                    if(creatPostDTO.getContent()==null) {
+                        return null;
+                    }
+
+                    newPost.setContent(creatPostDTO.getContent());
+                    User user = userRepo.getById(userDTO.getId());
+                    newPost.setUser(user);
+                    newPost.setStatus(true);
+                    newPost.setPet(null);
+                    Calendar cal = Calendar.getInstance();
+                    Date date = cal.getTime();
+                    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                    String formattedDate = dateFormat.format(date);
+                    newPost.setCreate_date(formattedDate);
+                    if(!user.getRole().equals("ROLE_USER")) {
+                        newPost.setEnable(true);
+                    }else{
+                        newPost.setEnable(false);
+                    }
+                    newPost.setTotal_like(0);
+                    postRepository.save(newPost);
+
+
+                    UserPostDTO userPostDTO = new UserPostDTO();
+                    userPostDTO.setId(newPost.getUser().getId());
+                    userPostDTO.setName(newPost.getUser().getName());
+                    userPostDTO.setAvatar(newPost.getUser().getAvatar());
+
+                    return new PostDTO(newPost.getId(),newPost.getImage(),newPost.getContent(),newPost.getCreate_date(),newPost.getTotal_like(), newPost.getTotal_comment(), commentService.convertCommentListToDTO(newPost.getComments()),null,userPostDTO,false);
                 }
-                newPost.setTotal_like(0);
-    postRepository.save(newPost);
+
 
             }else {
-                Pet pet = petRepository.getById(creatPostDTO.getIdPet());
-                if(pet == null) {
-                    throw new PetException("Not found Pet");
-                }
-                System.out.println(pet);
-                newPost.setImage(null);
-                if(creatPostDTO.getContent().equals("")){
-                    return null;
-                }
-                if(creatPostDTO.getContent()==null) {
-                    return null;
-                }
-                newPost.setContent(creatPostDTO.getContent());
-                User user = userRepo.getById(userDTO.getId());
-                newPost.setUser(user);
-                newPost.setPet(pet);
-                newPost.setStatus(true);
-                Calendar cal = Calendar.getInstance();
-                Date date = cal.getTime();
-                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-                String formattedDate = dateFormat.format(date);
-                newPost.setCreate_date(formattedDate);
-                if(!user.getRole().equals("ROLE_USER")) {
-                    newPost.setEnable(true);
+                if(creatPostDTO.getIdPet()!=null) {
+                    Pet pet = petRepository.getById(creatPostDTO.getIdPet());
+                    if (pet == null) {
+                        throw new PetException("Not found Pet");
+                    }
+                    System.out.println(pet);
+                    newPost.setImage(null);
+                    if (creatPostDTO.getContent().equals("")) {
+                        return null;
+                    }
+                    if (creatPostDTO.getContent() == null) {
+                        return null;
+                    }
+                    newPost.setContent(creatPostDTO.getContent());
+                    User user = userRepo.getById(userDTO.getId());
+                    newPost.setUser(user);
+                    newPost.setPet(pet);
+                    newPost.setStatus(true);
+                    Calendar cal = Calendar.getInstance();
+                    Date date = cal.getTime();
+                    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                    String formattedDate = dateFormat.format(date);
+                    newPost.setCreate_date(formattedDate);
+                    if (!user.getRole().equals("ROLE_USER")) {
+                        newPost.setEnable(true);
+                    } else {
+                        newPost.setEnable(false);
+                    }
+                    newPost.setTotal_like(0);
+                    postRepository.save(newPost);
+                    PetToPostDTO petToPostDTO = new PetToPostDTO();
+                    petToPostDTO.setId(newPost.getPet().getId());
+                    petToPostDTO.setName(newPost.getPet().getName());
+                    petToPostDTO.setImage(newPost.getPet().getImage());
+
+
+                    UserPostDTO userPostDTO = new UserPostDTO();
+                    userPostDTO.setId(newPost.getUser().getId());
+                    userPostDTO.setName(newPost.getUser().getName());
+                    userPostDTO.setAvatar(newPost.getUser().getAvatar());
+
+                    return new PostDTO(newPost.getId(),newPost.getImage(),newPost.getContent(),newPost.getCreate_date(),newPost.getTotal_like(), newPost.getTotal_comment(), commentService.convertCommentListToDTO(newPost.getComments()),petToPostDTO,userPostDTO,false);
                 }else{
-                    newPost.setEnable(false);
+                    newPost.setImage(null);
+                    if (creatPostDTO.getContent().equals("")) {
+                        return null;
+                    }
+                    if (creatPostDTO.getContent() == null) {
+                        return null;
+                    }
+                    newPost.setContent(creatPostDTO.getContent());
+                    User user = userRepo.getById(userDTO.getId());
+                    newPost.setUser(user);
+                    newPost.setPet(null);
+                    newPost.setStatus(true);
+                    Calendar cal = Calendar.getInstance();
+                    Date date = cal.getTime();
+                    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                    String formattedDate = dateFormat.format(date);
+                    newPost.setCreate_date(formattedDate);
+                    if (!user.getRole().equals("ROLE_USER")) {
+                        newPost.setEnable(true);
+                    } else {
+                        newPost.setEnable(false);
+                    }
+                    newPost.setTotal_like(0);
+                    postRepository.save(newPost);
+
+
+                    UserPostDTO userPostDTO = new UserPostDTO();
+                    userPostDTO.setId(newPost.getUser().getId());
+                    userPostDTO.setName(newPost.getUser().getName());
+                    userPostDTO.setAvatar(newPost.getUser().getAvatar());
+
+                    return new PostDTO(newPost.getId(),newPost.getImage(),newPost.getContent(),newPost.getCreate_date(),newPost.getTotal_like(), newPost.getTotal_comment(), commentService.convertCommentListToDTO(newPost.getComments()),null,userPostDTO,false);
+
                 }
-                newPost.setTotal_like(0);
-postRepository.save(newPost);
 
             }
 
-
-        PetToPostDTO petToPostDTO = new PetToPostDTO();
-        petToPostDTO.setId(newPost.getPet().getId());
-        petToPostDTO.setName(newPost.getPet().getName());
-        petToPostDTO.setImage(newPost.getPet().getImage());
-
-
-        UserPostDTO userPostDTO = new UserPostDTO();
-        userPostDTO.setId(newPost.getUser().getId());
-        userPostDTO.setName(newPost.getUser().getName());
-        userPostDTO.setAvatar(newPost.getUser().getAvatar());
-
-            return new PostDTO(newPost.getId(),newPost.getImage(),newPost.getContent(),newPost.getCreate_date(),newPost.getTotal_like(), newPost.getTotal_comment(), commentService.convertCommentListToDTO(newPost.getComments()),petToPostDTO,userPostDTO,false);
 
     }
 

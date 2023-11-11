@@ -12,6 +12,7 @@ import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 
 @RestController
+@CrossOrigin()
 @RequestMapping("/paypal")
 public class PaypalController {
 

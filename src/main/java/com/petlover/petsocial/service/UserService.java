@@ -15,8 +15,6 @@ public interface UserService {
     SingupDTO createUser(SingupDTO signupDTO, String url);
     String checkLogin(SigninDTO signinDTO);
     User getUserByEmail(String email);
-
-
     boolean checkEmail(String email);
 
     void removeSessionMessage();

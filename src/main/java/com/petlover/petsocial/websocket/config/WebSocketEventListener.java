@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Data
-public class WebSocketEventListener {
+public class   WebSocketEventListener {
     private Set<OnlineUserDto> onlineUsrs = new HashSet<>();
 
     @Autowired

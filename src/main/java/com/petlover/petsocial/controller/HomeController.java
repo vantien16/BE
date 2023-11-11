@@ -5,6 +5,7 @@ import com.petlover.petsocial.config.JwtProvider;
 import com.petlover.petsocial.exception.PostException;
 import com.petlover.petsocial.exception.UserException;
 import com.petlover.petsocial.exception.UserNotFoundException;
+import com.petlover.petsocial.model.entity.AuthenticationProvider;
 import com.petlover.petsocial.model.entity.User;
 import com.petlover.petsocial.payload.request.*;
 import com.petlover.petsocial.payload.response.AuthResponse;
@@ -19,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 
+import jakarta.validation.Valid;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -33,6 +35,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -102,7 +105,8 @@ public class HomeController {
     ResponseData responseData = new ResponseData();
     if (f) {
 //            throw new UserException("Email is already used with another account");
-      responseData.setData(false);
+      responseData.setIsSuccess(false);
+
     } else {
 
       SingupDTO userDtls = userService.createUser(userDTO,url);
@@ -111,11 +115,11 @@ public class HomeController {
       String token = jwtProvider.generateToken(authentication);
       AuthResponse res = new AuthResponse(token ,true,null);
 
-      // responseData.setData(res);
-        responseData.setData(true); 
+      responseData.setData(res);
+
     }
 
-    return new ResponseEntity<>(responseData.getData(), HttpStatus.CREATED);
+    return new ResponseEntity<>(responseData.getIsSuccess(), HttpStatus.CREATED);
   }
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody SigninDTO signinDTO) throws UserException{
@@ -289,7 +293,6 @@ public class HomeController {
 
         return "Reset password correct !";
     }
-
 
 
 }
