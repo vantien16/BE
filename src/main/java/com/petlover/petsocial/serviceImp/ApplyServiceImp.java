@@ -29,12 +29,15 @@ public class ApplyServiceImp implements ApplyService {
     @Autowired
     private ApplyRepository applyRepository;
 
+
+    //sua
     @Override
     public Apply createApply(Exchange exchange, UserDTO userDTO, UserDTO userDTOown) {
         User user = userRepository.findById(userDTO.getId()).orElse(null);
         User userown = userRepository.findById(userDTOown.getId()).orElse(null);
         Exchange exchange1 = exchangeRepository.findById(exchange.getId()).orElse(null);
         if (exchange1 != null && exchange1.getUser().getId()==userown.getId()){
+
             Apply apply = new Apply();
             apply.setExchange(exchange1);
             apply.setApply_date(new Date());

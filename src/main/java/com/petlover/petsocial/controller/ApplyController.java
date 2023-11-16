@@ -29,6 +29,8 @@ public class ApplyController {
     @Autowired
     private ApplyService applyService;
 
+
+    //sua
     @PostMapping("/create")
     public ResponseEntity<?> createApply (@RequestHeader("Authorization") String jwt, @RequestParam Long userid, @RequestParam Long id) throws UserException {
         UserDTO userDTO = userService.findUserProfileByJwt(jwt);
@@ -36,7 +38,12 @@ public class ApplyController {
         Exchange exchange = exchangeService.getOneExchange(userDTO1, id);
         if (exchange != null) {
             Apply apply = applyService.createApply(exchange,userDTO, userDTO1);
-            return ResponseEntity.ok("Apply created successfully.");
+            if(apply!=null){
+                return ResponseEntity.ok("Apply created successfully.");
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Apply have exist.");
+            }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exchange not found.");
         }

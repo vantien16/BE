@@ -56,7 +56,12 @@ public class PostServiceImp implements PostService {
                         String image = cloudinaryService.uploadFile(creatPostDTO.getFile());
                         newPost.setImage(image);
                     }catch (Exception e){}
-
+                    if(creatPostDTO.getContent().equals("")) {
+                        return null;
+                    }
+                    if(creatPostDTO.getContent()==null) {
+                        return null;
+                    }
 
                     newPost.setContent(creatPostDTO.getContent());
                     User user = userRepo.getById(userDTO.getId());
@@ -92,7 +97,12 @@ public class PostServiceImp implements PostService {
                         String image = cloudinaryService.uploadFile(creatPostDTO.getFile());
                         newPost.setImage(image);
                     }catch (Exception e){}
-
+                    if(creatPostDTO.getContent().equals("")) {
+                        return null;
+                    }
+                    if(creatPostDTO.getContent()==null) {
+                        return null;
+                    }
 
                     newPost.setContent(creatPostDTO.getContent());
                     User user = userRepo.getById(userDTO.getId());
@@ -269,14 +279,11 @@ public class PostServiceImp implements PostService {
             postDTO.setComments(commentService.convertCommentListToDTO(post.getComments()));
 
             PetToPostDTO petToPostDTO = new PetToPostDTO();
-            if(post.getPet()!=null) {
-                petToPostDTO.setId(post.getPet().getId());
-                petToPostDTO.setName(post.getPet().getName());
-                petToPostDTO.setImage(post.getPet().getImage());
-                postDTO.setPetToPostDTO(petToPostDTO);
-            }else{
-                postDTO.setPetToPostDTO(null);
-            }
+            petToPostDTO.setId(post.getPet().getId());
+            petToPostDTO.setName(post.getPet().getName());
+            petToPostDTO.setImage(post.getPet().getImage());
+            postDTO.setPetToPostDTO(petToPostDTO);
+
             UserPostDTO userPostDTO = new UserPostDTO();
             userPostDTO.setId(post.getUser().getId());
             userPostDTO.setName(post.getUser().getName());
@@ -304,14 +311,11 @@ public class PostServiceImp implements PostService {
             postDTO.setComments(commentService.convertCommentListToDTO(post.getComments()));
 
             PetToPostDTO petToPostDTO = new PetToPostDTO();
-            if(post.getPet()!=null) {
-                petToPostDTO.setId(post.getPet().getId());
-                petToPostDTO.setName(post.getPet().getName());
-                petToPostDTO.setImage(post.getPet().getImage());
-                postDTO.setPetToPostDTO(petToPostDTO);
-            }else{
-                postDTO.setPetToPostDTO(null);
-            }
+            petToPostDTO.setId(post.getPet().getId());
+            petToPostDTO.setName(post.getPet().getName());
+            petToPostDTO.setImage(post.getPet().getImage());
+            postDTO.setPetToPostDTO(petToPostDTO);
+
             UserPostDTO userPostDTO = new UserPostDTO();
             userPostDTO.setId(post.getUser().getId());
             userPostDTO.setName(post.getUser().getName());
@@ -348,14 +352,11 @@ public class PostServiceImp implements PostService {
             postDTO.setComments(commentService.convertCommentListToDTO(post.getComments()));
 
             PetToPostDTO petToPostDTO = new PetToPostDTO();
-            if(post.getPet()!=null) {
-                petToPostDTO.setId(post.getPet().getId());
-                petToPostDTO.setName(post.getPet().getName());
-                petToPostDTO.setImage(post.getPet().getImage());
-                postDTO.setPetToPostDTO(petToPostDTO);
-            }else{
-                postDTO.setPetToPostDTO(null);
-            }
+            petToPostDTO.setId(post.getPet().getId());
+            petToPostDTO.setName(post.getPet().getName());
+            petToPostDTO.setImage(post.getPet().getImage());
+            postDTO.setPetToPostDTO(petToPostDTO);
+
             UserPostDTO userPostDTO = new UserPostDTO();
             userPostDTO.setId(post.getUser().getId());
             userPostDTO.setName(post.getUser().getName());
@@ -394,14 +395,11 @@ public class PostServiceImp implements PostService {
             postDTO.setComments(commentService.convertCommentListToDTO(post.getComments()));
 
             PetToPostDTO petToPostDTO = new PetToPostDTO();
-            if(post.getPet()!=null) {
-                petToPostDTO.setId(post.getPet().getId());
-                petToPostDTO.setName(post.getPet().getName());
-                petToPostDTO.setImage(post.getPet().getImage());
-                postDTO.setPetToPostDTO(petToPostDTO);
-            }else{
-                postDTO.setPetToPostDTO(null);
-            }
+            petToPostDTO.setId(post.getPet().getId());
+            petToPostDTO.setName(post.getPet().getName());
+            petToPostDTO.setImage(post.getPet().getImage());
+            postDTO.setPetToPostDTO(petToPostDTO);
+
             UserPostDTO userPostDTO = new UserPostDTO();
             userPostDTO.setId(post.getUser().getId());
             userPostDTO.setName(post.getUser().getName());
@@ -422,13 +420,10 @@ public class PostServiceImp implements PostService {
             throw new PostException("Not found");
         }
         PetToPostDTO petToPostDTO = new PetToPostDTO();
-        if(getPost.getPet()!=null) {
-            petToPostDTO.setId(getPost.getPet().getId());
-            petToPostDTO.setName(getPost.getPet().getName());
-            petToPostDTO.setImage(getPost.getPet().getImage());
-        }else{
-            petToPostDTO =null;
-        }
+        petToPostDTO.setId(getPost.getPet().getId());
+        petToPostDTO.setName(getPost.getPet().getName());
+        petToPostDTO.setImage(getPost.getPet().getImage());
+
 
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setId(getPost.getUser().getId());
@@ -452,13 +447,10 @@ public class PostServiceImp implements PostService {
         }
         postRepository.save(getPost);
         PetToPostDTO petToPostDTO = new PetToPostDTO();
-        if(getPost.getPet()!=null) {
-            petToPostDTO.setId(getPost.getPet().getId());
-            petToPostDTO.setName(getPost.getPet().getName());
-            petToPostDTO.setImage(getPost.getPet().getImage());
-        }else{
-            petToPostDTO=null;
-        }
+        petToPostDTO.setId(getPost.getPet().getId());
+        petToPostDTO.setName(getPost.getPet().getName());
+        petToPostDTO.setImage(getPost.getPet().getImage());
+
 
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setId(getPost.getUser().getId());
@@ -493,13 +485,10 @@ public class PostServiceImp implements PostService {
 
             // Step 4: Construct and return the updated PostDTO
             PetToPostDTO petToPostDTO = new PetToPostDTO();
-            if(getPost.getPet()!=null) {
-                petToPostDTO.setId(getPost.getPet().getId());
-                petToPostDTO.setName(getPost.getPet().getName());
-                petToPostDTO.setImage(getPost.getPet().getImage());
-            }else{
-                petToPostDTO =null;
-            }
+            petToPostDTO.setId(getPost.getPet().getId());
+            petToPostDTO.setName(getPost.getPet().getName());
+            petToPostDTO.setImage(getPost.getPet().getImage());
+
             UserPostDTO userPostDTO = new UserPostDTO();
             userPostDTO.setId(getPost.getUser().getId());
             userPostDTO.setName(getPost.getUser().getName());

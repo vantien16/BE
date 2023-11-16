@@ -26,7 +26,8 @@ public interface ExchangeService {
     List<Exchange> getAllNotRemovedExchange(UserDTO userDTO);
 
 
-    List<ExchangeDTO> getAllExchangeToShow();
+    //sua
+    List<ExchangeDTO> getAllExchangeToShow(UserDTO userDTO);
     ExchangeDTO getOneExchangeDTO(UserDTO userDTO,Long id);
 
     Exchange getOneExchange(UserDTO userDTO,Long id);

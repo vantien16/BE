@@ -63,7 +63,6 @@ public class PetServiceImp implements PetService {
         }catch(Exception e){
             throw new PetException("pet not found with image");
         }
-
             newPet.setName(createPetDTO.getName());
             newPet.setDescription(createPetDTO.getDescription());
             User user = userRepo.getById(userDTO.getId());

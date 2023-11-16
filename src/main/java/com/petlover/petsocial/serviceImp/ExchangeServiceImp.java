@@ -64,13 +64,15 @@ public class ExchangeServiceImp implements ExchangeService {
 
         }
     }
+
+    //sua
     @Override
-    public List<ExchangeDTO> getAllExchangeToShow() {
+    public List<ExchangeDTO> getAllExchangeToShow(UserDTO userDTO) {
         List<ExchangeDTO> exchangeDTOList = new ArrayList<>();
         for (Exchange exchange : exchangeRepository.getAllExchange()) {
-            if(exchange.getStatus()==ExStatus.PENDING){
-            ExchangeDTO exchangeDTO = convertToDTO(exchange);
-            exchangeDTOList.add(exchangeDTO);}
+            if(exchange.getStatus()==ExStatus.PENDING && !exchange.getApplies().stream().anyMatch(apply -> apply.getUser().getId() == userDTO.getId())){
+                ExchangeDTO exchangeDTO = convertToDTO(exchange);
+                exchangeDTOList.add(exchangeDTO);}
         }
         return exchangeDTOList;
     }
@@ -99,7 +101,6 @@ public class ExchangeServiceImp implements ExchangeService {
             return convertToDTO(exchange);
         }else {
             return null;
-
         }
     }
 
