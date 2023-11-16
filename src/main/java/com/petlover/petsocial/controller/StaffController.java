@@ -44,13 +44,13 @@ public class StaffController {
         }
     }
 
-    @DeleteMapping("/{idPost}/delete")
-    public ResponseEntity<?> getDeletePost(@PathVariable Long idPost,@RequestHeader("Authorization") String jwt) throws UserException, PostException {
+    @PostMapping("/{idPost}/enable")
+    public ResponseEntity<?> getEnablePost(@PathVariable Long idPost,@RequestHeader("Authorization") String jwt) throws UserException, PostException {
         ResponseData responseData = new ResponseData();
         UserDTO userDTO = userService.findUserProfileByJwt(jwt);
         User user = userRepo.getById(userDTO.getId());
         if(user.getRole().equals("ROLE_STAFF")){
-            PostDTO post = staffService.getDeletePost(idPost);
+          PostDTO post = staffService.getEnablePost(idPost);
             responseData.setData(post);
             return new ResponseEntity<>(responseData, HttpStatus.OK);
 
@@ -62,13 +62,13 @@ public class StaffController {
         }
     }
 
-    @PostMapping("/{idPost}/enable")
-    public ResponseEntity<?> getEnablePost(@PathVariable Long idPost,@RequestHeader("Authorization") String jwt) throws UserException, PostException {
+    @DeleteMapping("/{idPost}/delete")
+    public ResponseEntity<?> getDeletePost(@PathVariable Long idPost,@RequestHeader("Authorization") String jwt) throws UserException, PostException {
         ResponseData responseData = new ResponseData();
         UserDTO userDTO = userService.findUserProfileByJwt(jwt);
         User user = userRepo.getById(userDTO.getId());
         if(user.getRole().equals("ROLE_STAFF")){
-          PostDTO post = staffService.getEnablePost(idPost);
+            PostDTO post = staffService.getDeletePost(idPost);
             responseData.setData(post);
             return new ResponseEntity<>(responseData, HttpStatus.OK);
 
