@@ -93,4 +93,31 @@ public class StaffServiceImp implements StaffService {
 
     }
 
+    public PostDTO getDeletePost(Long idPost) throws PostException {
+        Post getPost = postRepository.getById(idPost);
+        if(getPost == null){
+            throw new PostException("Not found Post");
+        }
+        getPost.setStatus(false);
+        postRepository.save(getPost);
+        PetToPostDTO petToPostDTO = new PetToPostDTO();
+        if(getPost.getPet()!=null) {
+            petToPostDTO.setId(getPost.getPet().getId());
+            petToPostDTO.setName(getPost.getPet().getName());
+            petToPostDTO.setImage(getPost.getPet().getImage());
+        }else{
+            petToPostDTO =null;
+        }
+
+        UserPostDTO userPostDTO = new UserPostDTO();
+        userPostDTO.setId(getPost.getUser().getId());
+        userPostDTO.setName(getPost.getUser().getName());
+        userPostDTO.setAvatar(getPost.getUser().getAvatar());
+
+
+
+        return new PostDTO(getPost.getId(),getPost.getImage(),getPost.getContent(),getPost.getCreate_date(),getPost.getTotal_like(), getPost.getTotal_comment(), commentService.convertCommentListToDTO(getPost.getComments()),petToPostDTO,userPostDTO,false);
+
+    }
+
 }

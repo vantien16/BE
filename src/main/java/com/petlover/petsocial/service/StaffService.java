@@ -8,4 +8,6 @@ import java.util.List;
 public interface StaffService {
     List<PostDTO> getAllPostDisable();
     PostDTO getEnablePost(Long idPost) throws PostException;
+
+    PostDTO getDeletePost(Long idPost) throws PostException;
 }
