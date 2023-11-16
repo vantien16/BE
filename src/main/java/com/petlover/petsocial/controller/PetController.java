@@ -82,7 +82,7 @@ public class PetController {
     }
     @PutMapping("/updatePet/{id}")
     //@PostMapping ("/updatePet")
-    public  ResponseEntity<?> updatePet(@PathVariable(value = "id") Long id, @RequestBody PetUpdateDTO petUpdateDTO,@RequestHeader("Authorization") String jwt) throws UserException, PetException {
+    public  ResponseEntity<?> updatePet(@PathVariable(value = "id") Long id, @ModelAttribute PetUpdateDTO petUpdateDTO,@RequestHeader("Authorization") String jwt) throws UserException, PetException {
         ResponseData responseData = new ResponseData();
         UserDTO userDTO = userService.findUserProfileByJwt(jwt);
         PetDTO petDTO1 = petService.updatePet(id,petUpdateDTO,userDTO);
