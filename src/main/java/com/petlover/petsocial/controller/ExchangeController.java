@@ -1,9 +1,12 @@
 package com.petlover.petsocial.controller;
 
 import com.petlover.petsocial.exception.UserException;
+import com.petlover.petsocial.model.entity.Exchange;
+import com.petlover.petsocial.model.entity.Pet;
 import com.petlover.petsocial.payload.request.*;
 import com.petlover.petsocial.service.ApplyService;
 import com.petlover.petsocial.service.ExchangeService;
+import com.petlover.petsocial.service.PetService;
 import com.petlover.petsocial.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,13 +28,32 @@ public class ExchangeController {
     @Autowired
     private ApplyService applyService;
 
+    @Autowired private PetService petService;
+
     //Create exchange
     @PostMapping("/create")
     public ResponseEntity<?> createExchange (@RequestHeader("Authorization") String jwt, @RequestBody CreateExchangeDTO createExchangeDTO) throws UserException {
         UserDTO userDTO = userService.findUserProfileByJwt(jwt);
         if(userDTO!=null){
-            ExchangeDTO exchange = exchangeService.addExchange(userDTO, createExchangeDTO.getPetDTO().getId(), createExchangeDTO.getPaymentAmount());
-            return ResponseEntity.ok(exchange);
+            PetDTO pet =  createExchangeDTO.getPetDTO();
+            List<Exchange> exchanges = exchangeService.getAllExchange(userDTO);
+            boolean isDuplicate = false;
+
+            for (Exchange exchange : exchanges) {
+                if (exchange.getPet().getId().equals(pet.getId())) {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+            if (isDuplicate){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Dupdicated pet.");
+            }else{
+                ExchangeDTO exchange = exchangeService.addExchange(userDTO, createExchangeDTO.getPetDTO().getId(), createExchangeDTO.getPaymentAmount());
+                return ResponseEntity.ok(exchange);
+            }
+
+
         }else{
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create exchange.");
         }

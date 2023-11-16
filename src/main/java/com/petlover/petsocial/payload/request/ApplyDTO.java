@@ -19,8 +19,7 @@ public class ApplyDTO {
     private Date applyDate;
     private ApplyStatus status;
     private ExchangeDTO exchange;
-    private Long userId;
-
+    private UserAppliedForExchangeDTO userApplied;
     public static ApplyDTO convertToDTO(Apply apply) {
         ApplyDTO applyDTO = new ApplyDTO();
         applyDTO.setId(apply.getId());
@@ -29,7 +28,7 @@ public class ApplyDTO {
         applyDTO.setExchange(convertToDTO1(apply.getExchange()));
 
         // Assuming you have appropriate getters in the Exchange and User entities
-        applyDTO.setUserId(apply.getUser().getId());
+        applyDTO.setUserApplied(new UserAppliedForExchangeDTO(apply.getUser().getId(),apply.getUser().getName(),apply.getUser().getEmail(),apply.getUser().getPhone(),apply.getUser().getAvatar()));
 
         return applyDTO;
     }

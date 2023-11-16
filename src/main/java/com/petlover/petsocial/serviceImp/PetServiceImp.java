@@ -89,10 +89,9 @@ public class PetServiceImp implements PetService {
         }
         return listpetDTO;
     }
-    public List<PetToPostDTO> getAllPetPost()
+    public List<PetToPostDTO> getAllPetPost(UserDTO userDTO)
     {
-        User user = (User) session.getAttribute("user");
-        List<Pet> petList= petRepository.getAllByIdUser(user.getId());
+        List<Pet> petList= petRepository.getAllByIdUser(userDTO.getId());
         List<PetToPostDTO> listpetDTO = new ArrayList<>();
         for(Pet pet : petList) {
             PetToPostDTO petDTO = new PetToPostDTO();

@@ -206,11 +206,17 @@ public class UserServiceImp implements UserService {
         for(Post post: user.getPosts()){
             if(post.isStatus()==true) {
                 if (post.isEnable() == true) {
-                    PetToPostDTO petToPostDTO = new PetToPostDTO();
-                    petToPostDTO.setId(post.getPet().getId());
-                    petToPostDTO.setName(post.getPet().getName());
-                    petToPostDTO.setImage(post.getPet().getImage());
 
+                    PetToPostDTO petToPostDTO = new PetToPostDTO();
+                    if(post.getPet()!=null) {
+
+                        petToPostDTO.setId(post.getPet().getId());
+                        petToPostDTO.setName(post.getPet().getName());
+                        petToPostDTO.setImage(post.getPet().getImage());
+                    }else{
+
+                        petToPostDTO =null;
+                    }
 
                     UserPostDTO userPostDTO = new UserPostDTO();
                     userPostDTO.setId(post.getUser().getId());
@@ -274,10 +280,13 @@ public class UserServiceImp implements UserService {
         List<PostDTO> postDTOList = new ArrayList<>();
         for(Post post: user.getPosts()){
             PetToPostDTO petToPostDTO = new PetToPostDTO();
-            petToPostDTO.setId(post.getPet().getId());
-            petToPostDTO.setName(post.getPet().getName());
-            petToPostDTO.setImage(post.getPet().getImage());
-
+            if(post.getPet()!=null) {
+                petToPostDTO.setId(post.getPet().getId());
+                petToPostDTO.setName(post.getPet().getName());
+                petToPostDTO.setImage(post.getPet().getImage());
+            }else{
+                petToPostDTO =null;
+            }
 
             UserPostDTO userPostDTO = new UserPostDTO();
             userPostDTO.setId(post.getUser().getId());
@@ -317,11 +326,15 @@ public class UserServiceImp implements UserService {
         for(Post post: user.getPosts()){
             if(post.isStatus()==true) {
                 if(post.isEnable()==true) {
-                    PetToPostDTO petToPostDTO = new PetToPostDTO();
-                    petToPostDTO.setId(post.getPet().getId());
-                    petToPostDTO.setName(post.getPet().getName());
-                    petToPostDTO.setImage(post.getPet().getImage());
 
+                    PetToPostDTO petToPostDTO = new PetToPostDTO();
+                    if(post.getPet()!=null) {
+                        petToPostDTO.setId(post.getPet().getId());
+                        petToPostDTO.setName(post.getPet().getName());
+                        petToPostDTO.setImage(post.getPet().getImage());
+                    }else{
+                        petToPostDTO=null;
+                    }
 
                     UserPostDTO userPostDTO = new UserPostDTO();
                     userPostDTO.setId(post.getUser().getId());

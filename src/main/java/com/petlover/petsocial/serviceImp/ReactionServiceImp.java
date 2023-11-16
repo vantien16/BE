@@ -71,10 +71,13 @@ public class ReactionServiceImp implements ReactionService {
             List<PostDTO> postDTOList = new ArrayList<>();
             for(Post post: reaction.getUser().getPosts()){
                 PetToPostDTO petToPostDTO = new PetToPostDTO();
-                petToPostDTO.setId(post.getPet().getId());
-                petToPostDTO.setName(post.getPet().getName());
-                petToPostDTO.setImage(post.getPet().getImage());
-
+                if(post.getPet()!=null) {
+                    petToPostDTO.setId(post.getPet().getId());
+                    petToPostDTO.setName(post.getPet().getName());
+                    petToPostDTO.setImage(post.getPet().getImage());
+                }else{
+                    petToPostDTO = null;
+                }
 
                 UserPostDTO userPostDTO = new UserPostDTO();
                 userPostDTO.setId(post.getUser().getId());

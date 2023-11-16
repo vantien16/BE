@@ -11,5 +11,5 @@ public interface PetService {
     PetDTO deletePet(Long id,UserDTO userDTO) throws PetException;
     PetDTO getOnePet(Long id, UserDTO userDTO);
     PetDTO updatePet(Long id,PetUpdateDTO petUpdateDTO, UserDTO userDTO);
-    List<PetToPostDTO> getAllPetPost();
+    List<PetToPostDTO> getAllPetPost(UserDTO userDTO);
 }

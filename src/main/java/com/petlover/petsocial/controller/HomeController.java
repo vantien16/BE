@@ -45,7 +45,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+
 public class HomeController {
     @Autowired
     private UserService userService;
@@ -106,7 +106,6 @@ public class HomeController {
     if (f) {
 //            throw new UserException("Email is already used with another account");
       responseData.setIsSuccess(false);
-
     } else {
 
       SingupDTO userDtls = userService.createUser(userDTO,url);

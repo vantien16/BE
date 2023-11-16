@@ -105,10 +105,13 @@ public class CommentServiceImp implements CommentService {
             if(post.isStatus()) {
                 if(post.isEnable()) {
                     PetToPostDTO petToPostDTO = new PetToPostDTO();
-                    petToPostDTO.setId(post.getPet().getId());
-                    petToPostDTO.setName(post.getPet().getName());
-                    petToPostDTO.setImage(post.getPet().getImage());
-
+                    if(post.getPet()!=null) {
+                        petToPostDTO.setId(post.getPet().getId());
+                        petToPostDTO.setName(post.getPet().getName());
+                        petToPostDTO.setImage(post.getPet().getImage());
+                    }else{
+                        petToPostDTO=null;
+                    }
 
                     UserPostDTO userPostDTO = new UserPostDTO();
                     userPostDTO.setId(post.getUser().getId());

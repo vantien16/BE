@@ -13,6 +13,7 @@ public class OnlineUserDto {
     private Long id;
     private String sessionId;
     private String name;
+    private String avatar;
     private Integer noOfNewMessages;
     private String status;
 

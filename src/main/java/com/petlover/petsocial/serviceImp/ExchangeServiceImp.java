@@ -247,10 +247,13 @@ public class ExchangeServiceImp implements ExchangeService {
             if(post.isStatus()==true) {
                 if(post.isEnable()==true) {
                     PetToPostDTO petToPostDTO = new PetToPostDTO();
-                    petToPostDTO.setId(post.getPet().getId());
-                    petToPostDTO.setName(post.getPet().getName());
-                    petToPostDTO.setImage(post.getPet().getImage());
-
+                    if(post.getPet()!=null) {
+                        petToPostDTO.setId(post.getPet().getId());
+                        petToPostDTO.setName(post.getPet().getName());
+                        petToPostDTO.setImage(post.getPet().getImage());
+                    }else{
+                        petToPostDTO=null;
+                    }
 
                     UserPostDTO userPostDTO = new UserPostDTO();
                     userPostDTO.setId(post.getUser().getId());

@@ -44,11 +44,14 @@ public class StaffServiceImp implements StaffService {
             postDTO.setComments(commentService.convertCommentListToDTO(post.getComments()));
 
             PetToPostDTO petToPostDTO = new PetToPostDTO();
-            petToPostDTO.setId(post.getPet().getId());
-            petToPostDTO.setName(post.getPet().getName());
-            petToPostDTO.setImage(post.getPet().getImage());
-            postDTO.setPetToPostDTO(petToPostDTO);
-
+            if(post.getPet()!=null) {
+                petToPostDTO.setId(post.getPet().getId());
+                petToPostDTO.setName(post.getPet().getName());
+                petToPostDTO.setImage(post.getPet().getImage());
+                postDTO.setPetToPostDTO(petToPostDTO);
+            }else{
+                postDTO.setPetToPostDTO(null);
+            }
             UserPostDTO userPostDTO = new UserPostDTO();
             userPostDTO.setId(post.getUser().getId());
             userPostDTO.setName(post.getUser().getName());
@@ -71,10 +74,13 @@ public class StaffServiceImp implements StaffService {
         getPost.setEnable(true);
        postRepository.save(getPost);
         PetToPostDTO petToPostDTO = new PetToPostDTO();
-        petToPostDTO.setId(getPost.getPet().getId());
-        petToPostDTO.setName(getPost.getPet().getName());
-        petToPostDTO.setImage(getPost.getPet().getImage());
-
+        if(getPost.getPet()!=null) {
+            petToPostDTO.setId(getPost.getPet().getId());
+            petToPostDTO.setName(getPost.getPet().getName());
+            petToPostDTO.setImage(getPost.getPet().getImage());
+        }else{
+            petToPostDTO =null;
+        }
 
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setId(getPost.getUser().getId());
