@@ -40,7 +40,4 @@ public class Exchange {
     @OneToMany(mappedBy = "exchange", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Apply> applies;
-    @OneToMany(mappedBy = "exchange", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Chat> chats;
 }

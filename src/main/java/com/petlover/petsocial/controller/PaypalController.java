@@ -22,18 +22,18 @@ public class PaypalController {
     @PostMapping("/pay")
     public ResponseEntity<?> payment(@RequestBody OrderDTO order) {
         try {
-            Payment payment = service.createPayment(order.getPrice(),order.getDescription());
+            Payment payment = service.createPayment(order.getPrice(), order.getDescription());
+            String approvalUrl = payment.getLinks().stream()
+                    .filter(link -> link.getRel().equals("approval_url"))
+                    .findFirst()
+                    .map(Links::getHref)
+                    .orElse(null);
 
-            for(Links link:payment.getLinks()) {
-                if(link.getRel().equals("approval_url")) {
-                    return ResponseEntity.status(HttpStatus.FOUND)
-                            .header("Location", link.getHref())
-                            .build();
-                }
+            if (approvalUrl != null) {
+                return ResponseEntity.ok(approvalUrl);
+            } else {
+                return ResponseEntity.ok(payment);
             }
-
-            return ResponseEntity.ok(payment);
-
         } catch (PayPalRESTException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -54,5 +54,4 @@ public class PaypalController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-
 }

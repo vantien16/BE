@@ -66,11 +66,4 @@ public class User implements Serializable {
     @JsonIgnore
     @ToString.Exclude
     private List<Apply> applies;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JsonIgnore
-    @ToString.Exclude
-    private List<Chat> chats;
-
-
-
 }

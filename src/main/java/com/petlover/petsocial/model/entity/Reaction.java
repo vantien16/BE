@@ -28,11 +28,4 @@ public class Reaction {
     @ToString.Exclude
     @JsonIgnore
     private Post post;
-
-    @ManyToOne
-    @JoinColumn(name = "comment_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    private Comment comment;
 }

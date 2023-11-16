@@ -109,7 +109,6 @@ public class ReactionServiceImp implements ReactionService {
         Reaction reaction = new Reaction();
         reaction.setActive(true);
         reaction.setUser(user);
-        reaction.setComment(comment);
         Reaction savedReaction = reactionRepository.save(reaction);
 
         return convertToDTO(savedReaction);
@@ -122,9 +121,6 @@ public class ReactionServiceImp implements ReactionService {
         dto.setUserId(reaction.getUser().getId());
         if (reaction.getPost() != null) {
             dto.setPostId(reaction.getPost().getId());
-        }
-        if (reaction.getComment() != null) {
-            dto.setCommentId(reaction.getComment().getId());
         }
         return dto;
     }

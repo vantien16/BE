@@ -56,6 +56,7 @@ public class UserServiceImp implements UserService {
         user.setPhone(signupDTO.getPhone());
         //String password = bCryptPasswordEncoder.encode(signupDTO.getPassword());
         user.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
+        user.setAvatar("https://pixabay.com/vi/vectors/bi%E1%BB%83u-t%C6%B0%E1%BB%A3ng-ng%C6%B0%E1%BB%9Di-s%E1%BB%AD-d%E1%BB%A5ng-ng%C6%B0%E1%BB%9Di-1633249/");
         user.setRole("ROLE_USER");
         user.setEnable(false);
         user.setVerificationCode(UUID.randomUUID().toString());
