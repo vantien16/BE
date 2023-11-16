@@ -44,6 +44,24 @@ public class StaffController {
         }
     }
 
+    @DeleteMapping("/{idPost}/delete")
+    public ResponseEntity<?> getDeletePost(@PathVariable Long idPost,@RequestHeader("Authorization") String jwt) throws UserException, PostException {
+        ResponseData responseData = new ResponseData();
+        UserDTO userDTO = userService.findUserProfileByJwt(jwt);
+        User user = userRepo.getById(userDTO.getId());
+        if(user.getRole().equals("ROLE_STAFF")){
+            PostDTO post = staffService.getDeletePost(idPost);
+            responseData.setData(post);
+            return new ResponseEntity<>(responseData, HttpStatus.OK);
+
+        }else{
+            responseData.setData("Only Staff");
+            responseData.setStatus(403);
+            responseData.setIsSuccess(false);
+            return new ResponseEntity<>(responseData, HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/{idPost}/enable")
     public ResponseEntity<?> getEnablePost(@PathVariable Long idPost,@RequestHeader("Authorization") String jwt) throws UserException, PostException {
         ResponseData responseData = new ResponseData();
