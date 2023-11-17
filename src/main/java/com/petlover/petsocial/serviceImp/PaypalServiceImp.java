@@ -48,8 +48,8 @@ public class PaypalServiceImp implements PaypalService {
         payment.setPayer(payer);
         payment.setTransactions(transactions);
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl("http://localhost:8080/paypal/cancel");
-        redirectUrls.setReturnUrl("http://localhost:8080/paypal/success");
+        redirectUrls.setCancelUrl("https://petsocial.azurewebsites.net/paypal/cancel");
+        redirectUrls.setReturnUrl("https://petsocial.azurewebsites.net/paypal/success");
         payment.setRedirectUrls(redirectUrls);
 
         return payment.create(apiContext);
