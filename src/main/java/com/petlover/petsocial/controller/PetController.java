@@ -81,7 +81,6 @@ public class PetController {
         return new ResponseEntity<>(responseData,HttpStatus.OK);
     }
     @PutMapping("/updatePet/{id}")
-    @ResponseBody
     //@PostMapping ("/updatePet")
     public  ResponseEntity<?> updatePet(@PathVariable(value = "id") Long id, @ModelAttribute PetUpdateDTO petUpdateDTO,@RequestHeader("Authorization") String jwt) throws UserException, PetException {
         ResponseData responseData = new ResponseData();

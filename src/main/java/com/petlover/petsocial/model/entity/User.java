@@ -9,6 +9,7 @@ import lombok.ToString;
 import net.minidev.json.annotate.JsonIgnore;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -66,4 +67,6 @@ public class User implements Serializable {
     @JsonIgnore
     @ToString.Exclude
     private List<Apply> applies;
+    @Column(name = "balance", precision = 10, scale = 2)
+    private BigDecimal balance = BigDecimal.ZERO;
 }

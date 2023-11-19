@@ -96,7 +96,7 @@ public class HomeController {
     }
 
   @PostMapping("/createUser")
-  public ResponseEntity<?> createuser(@RequestBody SingupDTO userDTO, HttpSession session, HttpServletRequest request) throws UserException {
+  public ResponseEntity<?> createuser(@RequestBody SingupDTO userDTO, HttpServletRequest request) throws UserException {
     String url = request.getRequestURL().toString();
     http://localhost:8080/createUser
     url = url.replace(request.getServletPath(), "");
@@ -123,7 +123,7 @@ public class HomeController {
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody SigninDTO signinDTO) throws UserException{
         ResponseData responseData = new ResponseData();
-        //SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        // SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         // String encrypted = Encoders.BASE64.encode(secretKey.getEncoded());
         //System.out.println(encrypted);
 
@@ -137,6 +137,8 @@ public class HomeController {
             responseData.setData("Incorrect");
         }else if(userLogin.equals("Your account has not been activated!")){
             responseData.setData("Activated");
+        }else if(userLogin.equals("Account block")){
+            responseData.setData("Account block");
         }else {
 //      responseData.setToken(token);
 //      responseData.setData(res);
@@ -219,7 +221,7 @@ public class HomeController {
     }
     @PostMapping("/forgot_password")
     public ResponseEntity<?> processForgotPassword(@RequestBody ForgotPasswordDTO forgotPasswordDTO,HttpServletRequest request) {
-        String token = RandomString.make(30);
+        String token = RandomString.make(4);
 
 
         try {
@@ -271,10 +273,10 @@ public class HomeController {
         User user = userService.getByResetPasswordToken(token);
         if (user == null) {
 
-            return "Invalid Token";
+            return "Invalid Code";
         }
 
-        return token;
+        return "Code to reset password: " +token;
     }
     @PostMapping("/reset_password")
     public String processResetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
@@ -284,7 +286,7 @@ public class HomeController {
         User user = userService.getByResetPasswordToken(gettoken);
         if (user == null) {
 
-            return "Invalid Token";
+            return "Invalid Code";
         } else {
             userService.updatePassword(user, pass);
 

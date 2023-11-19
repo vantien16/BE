@@ -7,6 +7,7 @@ import com.petlover.petsocial.model.entity.AuthenticationProvider;
 import com.petlover.petsocial.model.entity.User;
 import com.petlover.petsocial.payload.request.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -35,4 +36,10 @@ public interface UserService {
 
     List<UserHomeDTO> getListUser();
     List<UserHomeDTO> getSearchListUser(String name);
+    User updateBalance(String jwt, BigDecimal amount) throws UserException;
+    void storeJwtToken(String paymentId, String jwt);
+    String retrieveJwtToken(String paymentId);
+    User substractBalanceToCreateExchange(String jwt);
+
+    BigDecimal getBalance(String jwt) throws UserException;
 }

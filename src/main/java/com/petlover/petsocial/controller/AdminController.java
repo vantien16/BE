@@ -1,16 +1,22 @@
 package com.petlover.petsocial.controller;
 
 
+import com.petlover.petsocial.config.JwtProvider;
 import com.petlover.petsocial.exception.UserException;
 import com.petlover.petsocial.model.entity.User;
 import com.petlover.petsocial.payload.request.*;
+import com.petlover.petsocial.payload.response.AuthResponse;
 import com.petlover.petsocial.payload.response.ResponseData;
 import com.petlover.petsocial.repository.UserRepository;
 import com.petlover.petsocial.service.AdminService;
 import com.petlover.petsocial.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -27,6 +33,8 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private JwtProvider jwtProvider;
 
 
     @GetMapping("/getAllUser")
@@ -167,6 +175,7 @@ public class AdminController {
             int totalPet = adminService.getTotalPetDisplay();
             int totalPostDisplay = adminService.getTotalPostDisplay();
             int totalExchange = adminService.getTotalExchangeDisplay();
+            double balance = adminService.getTotalBalance();
 
             // Tạo một đối tượng JSON để chứa thông tin thống kê
             Map<String, Integer> monthlyStatistics = new HashMap<>();
@@ -189,6 +198,7 @@ public class AdminController {
             statistics.put("monthlyStatistics", monthlyStatistics);
             statistics.put("totalExchange", totalExchange);
             statistics.put("monthlyExchangeStatistics", monthlyExchangeStatistics);
+            statistics.put("totalBalance", balance);
 
             responseData.setData(statistics);
             return new ResponseEntity<>(responseData, HttpStatus.OK);
@@ -198,5 +208,38 @@ public class AdminController {
             responseData.setIsSuccess(false);
             return new ResponseEntity<>(responseData, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/createStaff")
+    public ResponseEntity<?> createStaff(@RequestBody SingupDTO userDTO, @RequestHeader("Authorization") String jwt) throws UserException {
+        ResponseData responseData = new ResponseData();
+        UserDTO userDTO1 = userService.findUserProfileByJwt(jwt);
+        User user = userRepo.getById(userDTO1.getId());
+        if(user.getRole().equals("ROLE_ADMIN")) {
+            System.out.println(userDTO);
+            boolean f = userService.checkEmail(userDTO.getEmail());
+            if (f) {
+//            throw new UserException("Email is already used with another account");
+                responseData.setIsSuccess(false);
+            } else {
+
+                SingupDTO userDtls = adminService.createStaff(userDTO);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userDTO.getEmail(), userDTO.getPassword());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String token = jwtProvider.generateToken(authentication);
+                AuthResponse res = new AuthResponse(token, true, null);
+
+                responseData.setData(res);
+
+            }
+
+            return new ResponseEntity<>(responseData.getIsSuccess(), HttpStatus.CREATED);
+        } else {
+            responseData.setData("Only Admin");
+            responseData.setStatus(403);
+            responseData.setIsSuccess(false);
+            return new ResponseEntity<>(responseData, HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

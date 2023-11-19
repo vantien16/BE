@@ -5,6 +5,7 @@ import com.petlover.petsocial.config.oauth.CustomOAuth2UserService;
 import com.petlover.petsocial.config.oauth.OAuth2LoginSuccessHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,8 @@ import java.util.Collections;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    @Value("${baseurl}")
+    private String baseurl;
 
     @Autowired
    private CustomOAuth2UserService oAuth2UserService;
@@ -101,7 +104,7 @@ and()
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg =  new CorsConfiguration();
-                cfg.setAllowedOrigins(Arrays.asList("http://103.253.147.216"));
+                cfg.setAllowedOrigins(Arrays.asList(baseurl));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
                 cfg.setAllowedHeaders(Collections.singletonList("*"));

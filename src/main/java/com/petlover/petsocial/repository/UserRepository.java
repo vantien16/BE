@@ -22,6 +22,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value="SELECT * FROM user u where u.role <> \"ROLE_ADMIN\"",nativeQuery = true)
     List<User> listUser();
 
+    @Query(value = "SELECT SUM(u.balance) FROM user u WHERE u.role <> 'ROLE_ADMIN'", nativeQuery = true)
+    Double getTotalBalance();
+
     @Query (value="SELECT * FROM user u where u.enable=1", nativeQuery = true)
     List<User> listUserHome();
     Optional<User> findByName(String name);

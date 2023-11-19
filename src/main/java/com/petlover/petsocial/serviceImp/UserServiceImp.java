@@ -13,6 +13,8 @@ import com.petlover.petsocial.service.UserService;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,9 +23,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static com.petlover.petsocial.model.entity.AuthenticationProvider.BLOCK_USER;
+
 @Service
 public class UserServiceImp implements UserService {
     @Autowired
@@ -44,6 +52,8 @@ public class UserServiceImp implements UserService {
     @Autowired
     private ReactionRepository reactionRepository;
 
+    private Map<String, String> paymentIdToJwtMap = new ConcurrentHashMap<>();
+
     @Override
     public User findById(Long id) {
         return userRepo.findById(id).orElse(null);
@@ -56,9 +66,10 @@ public class UserServiceImp implements UserService {
         user.setPhone(signupDTO.getPhone());
         //String password = bCryptPasswordEncoder.encode(signupDTO.getPassword());
         user.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
-        user.setAvatar("https://pixabay.com/vi/vectors/bi%E1%BB%83u-t%C6%B0%E1%BB%A3ng-ng%C6%B0%E1%BB%9Di-s%E1%BB%AD-d%E1%BB%A5ng-ng%C6%B0%E1%BB%9Di-1633249/");
+        user.setAvatar("https://res.cloudinary.com/dyrprccxf/image/upload/v1699728147/zoaodn4jg4dalzoghhx3.jpg");
         user.setRole("ROLE_USER");
         user.setEnable(false);
+        user.setAvatar("link");
         user.setVerificationCode(UUID.randomUUID().toString());
         User newuser = userRepo.save(user);
 
@@ -73,6 +84,8 @@ public class UserServiceImp implements UserService {
         User user = userRepo.findByEmail(signinDTO.getEmail());
         if (user == null) {
             return "Incorrect username or password";
+        } else if(user.getAuthProvider()==BLOCK_USER){
+           return "Account block";
         } else if (!user.isEnable()) {
             return "Your account has not been activated!";
         } else if (passwordEncoder.matches(signinDTO.getPassword(), user.getPassword())) {
@@ -404,6 +417,55 @@ public class UserServiceImp implements UserService {
         return userHomeDTOList;
     }
 
+    @Override
+    public User updateBalance(String jwt, BigDecimal amount) throws UserException {
+        String email = jwtProvider.getEmailFromToken(jwt);
+        User user = userRepo.findByEmail(email);
+        if(user==null) {
+            throw new UserException("user not found with email" + email);
+        }
+        BigDecimal balance = user.getBalance();
+        if (balance != null) {
+            balance = balance.add(amount);
+        } else {
+            balance = amount;
+        }
+        user.setBalance(balance);
+        userRepo.save(user);
+        return user;
+    }
 
+    @Override
+    public User substractBalanceToCreateExchange(String jwt) {
+        String email = jwtProvider.getEmailFromToken(jwt);
+        User user = userRepo.findByEmail(email);
+        if(user.getBalance() == null || user.getBalance().compareTo(BigDecimal.ONE) < 0) {
+            return null;
+        }
+        BigDecimal balance = user.getBalance();
+        balance = balance.subtract(BigDecimal.ONE);
+        user.setBalance(balance);
+        userRepo.save(user);
+        return user;
+    }
 
+    @Override
+    public void storeJwtToken(String paymentId, String jwt) {
+        paymentIdToJwtMap.put(paymentId, jwt);
+    }
+
+    @Override
+    public String retrieveJwtToken(String paymentId) {
+        return paymentIdToJwtMap.get(paymentId);
+    }
+
+    @Override
+    public BigDecimal getBalance(String jwt) throws UserException {
+        String email = jwtProvider.getEmailFromToken(jwt);
+        User user = userRepo.findByEmail(email);
+        if(user==null) {
+            throw new UserException("user not found with email" + email);
+        }
+        return user.getBalance();
+    }
 }

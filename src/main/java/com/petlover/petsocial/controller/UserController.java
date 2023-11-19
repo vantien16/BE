@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -68,5 +69,17 @@ public class UserController {
         List<UserHomeDTO> list = userService.getSearchListUser(name);
         responseData.setData(list);
         return new ResponseEntity<>(responseData,HttpStatus.OK);
+    }
+
+    @GetMapping("/getBalance")
+    public ResponseEntity<?> getBalance(@RequestHeader("Authorization") String jwt) {
+        ResponseData responseData = new ResponseData();
+        try {
+            BigDecimal balance = userService.getBalance(jwt);
+            responseData.setData(balance);
+            return new ResponseEntity<>(responseData,HttpStatus.OK);
+        } catch (UserException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

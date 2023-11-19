@@ -62,7 +62,7 @@ public class StaffController {
         }
     }
 
-   @DeleteMapping("/{idPost}/delete")
+    @DeleteMapping("/{idPost}/delete")
     public ResponseEntity<?> getDeletePost(@PathVariable Long idPost,@RequestHeader("Authorization") String jwt) throws UserException, PostException {
         ResponseData responseData = new ResponseData();
         UserDTO userDTO = userService.findUserProfileByJwt(jwt);

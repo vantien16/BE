@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.petlover.petsocial.service.PaypalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.paypal.api.payments.Amount;
@@ -24,6 +25,8 @@ public class PaypalServiceImp implements PaypalService {
     @Autowired
     private APIContext apiContext;
 
+    @Value("${baseurl}")
+    private String baseurl;
 
     public Payment createPayment(
             Double total,
@@ -48,8 +51,8 @@ public class PaypalServiceImp implements PaypalService {
         payment.setPayer(payer);
         payment.setTransactions(transactions);
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl("https://petsocial.azurewebsites.net/paypal/cancel");
-        redirectUrls.setReturnUrl("https://petsocial.azurewebsites.net/paypal/success");
+        redirectUrls.setCancelUrl(baseurl+"/paypal/cancel");
+        redirectUrls.setReturnUrl(baseurl+"/paypal/success");
         payment.setRedirectUrls(redirectUrls);
 
         return payment.create(apiContext);

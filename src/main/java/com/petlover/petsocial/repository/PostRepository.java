@@ -15,7 +15,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value="Select * From post p WHERE p.enable = 1 and p.status = 1 and p.content like CONCAT('%',%?1%,'%') ",nativeQuery = true)
     List<Post> searchPost(String content);
     Post getById(Long id);
-    @Query(value="Select * From post p WHERE p.enable = 0 and p.status = 1",nativeQuery = true)
+    @Query(value="Select * From post p WHERE p.enable = 0 and p.status = 1 ORDER BY p.id DESC",nativeQuery = true)
     List<Post> getAllPostDisable();
     @Query(value="Select * From post p",nativeQuery = true)
     List<Post> getAllPostForAdmin();
