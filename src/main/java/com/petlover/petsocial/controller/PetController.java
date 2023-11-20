@@ -58,7 +58,7 @@ public class PetController {
         responseData.setData(list);
         return new ResponseEntity<>(responseData,HttpStatus.OK);
     }
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deletePet(@RequestHeader("Authorization") String jwt,@PathVariable(value = "id") Long id) throws PetException, UserException {
         ResponseData responseData = new ResponseData();
         UserDTO userDTO = userService.findUserProfileByJwt(jwt);
