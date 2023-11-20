@@ -3,8 +3,10 @@ package com.petlover.petsocial.controller;
 import com.petlover.petsocial.exception.PostException;
 import com.petlover.petsocial.exception.UserException;
 import com.petlover.petsocial.model.entity.User;
+import com.petlover.petsocial.payload.request.PostDTO;
 import com.petlover.petsocial.payload.request.ReactionDTO;
 import com.petlover.petsocial.payload.request.UserDTO;
+import com.petlover.petsocial.payload.request.UserPostDTO;
 import com.petlover.petsocial.payload.response.ResponseData;
 import com.petlover.petsocial.service.ReactionService;
 import com.petlover.petsocial.service.UserService;
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/reaction")
@@ -31,6 +35,15 @@ public class ReactionController {
         responseData.setData(reactionDTO);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
+
+    @GetMapping ("/{idPost}/viewUser")
+    public ResponseEntity<?> getUserReaction(@PathVariable Long idPost) throws UserException, PostException {
+        ResponseData responseData = new ResponseData();
+       List<UserPostDTO> viewListUser = reactionService.getAllUserReaction(idPost);
+        responseData.setData(viewListUser);
+        return new ResponseEntity<>(responseData,HttpStatus.OK);
+    }
+
 
     @PostMapping("/comment/{idComment}/react")
     public ResponseEntity<?> reactComment(@PathVariable Long idComment, @RequestHeader("Authorization") String jwt) throws UserException {
