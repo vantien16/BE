@@ -102,6 +102,18 @@ public class ReactionServiceImp implements ReactionService {
         }
         return reactionDTOList;
    }
+   public List<UserPostDTO> getAllUserReaction(Long idPost) throws PostException {
+        List<Reaction> reactionList = reactionRepository.findByPostId(idPost);
+        List<UserPostDTO> reactionUserDTOList = new ArrayList<>();
+        for(Reaction reaction : reactionList){
+            UserPostDTO userPostDTO = new UserPostDTO();
+            userPostDTO.setId(reaction.getUser().getId());
+            userPostDTO.setName(reaction.getUser().getName());
+            userPostDTO.setAvatar(reaction.getUser().getAvatar());
+            reactionUserDTOList.add(userPostDTO);
+        }
+        return reactionUserDTOList;
+    }
 
     public ReactionDTO reactComment(Long idComment, UserDTO userDTO) throws UserException {
         Comment comment = commentRepository.getById(idComment);
