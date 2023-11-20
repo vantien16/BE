@@ -23,8 +23,8 @@ import java.util.Collections;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Value("${baseurl}")
-    private String baseurl;
+    @Value("${fronturl}")
+    private String fronturl;
 
     @Autowired
    private CustomOAuth2UserService oAuth2UserService;
@@ -104,7 +104,7 @@ and()
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg =  new CorsConfiguration();
-                cfg.setAllowedOrigins(Arrays.asList(baseurl));
+                cfg.setAllowedOrigins(Arrays.asList(fronturl));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
                 cfg.setAllowedHeaders(Collections.singletonList("*"));

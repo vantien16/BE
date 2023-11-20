@@ -95,7 +95,7 @@ public class ExchangeServiceImp implements ExchangeService {
         Exchange exchange = exchangeRepository.findById(id).orElse(null);
         User user = userRepository.findById(userDTO.getId()).orElse(null);
 
-        if(paymentAmount>0 && exchange.getUser().getId()==user.getId()){
+        if(paymentAmount>=0 && exchange.getUser().getId()==user.getId()){
             exchange.setPayment_amount(paymentAmount);
             exchangeRepository.save(exchange);
             return convertToDTO(exchange);
