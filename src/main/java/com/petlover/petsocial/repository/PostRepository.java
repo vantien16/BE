@@ -24,4 +24,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> getAllPostDeleteForAdmin();
     @Query(value="Select * From post p WHERE p.status = 1",nativeQuery = true)
     List<Post> getAllPostDisplayUserForAdmin();
+    @Query(value="Select p From Post p JOIN p.reactions r where r.user.id=:idUser AND p.status = true AND p.enable = true ")
+    List<Post> findPostByReactionUser(Long idUser);
 }

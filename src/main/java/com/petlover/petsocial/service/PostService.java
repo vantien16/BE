@@ -19,4 +19,6 @@ public interface PostService {
     List<PostDTO> sreachPost(String content, UserDTO userDTO);
     List<PostDTO> sreachPostHome(String content);
     List<PostDTO> getAllPostHome();
+
+    List<PostDTO> getAllYourPostReaction(Long idUser);
 }

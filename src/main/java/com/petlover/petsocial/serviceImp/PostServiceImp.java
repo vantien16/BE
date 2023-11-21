@@ -539,4 +539,50 @@ public class PostServiceImp implements PostService {
         }
     }
 
+    public List<PostDTO> getAllYourPostReaction(Long idUser)
+    {
+        List<Post> postList = postRepository.findPostByReactionUser(idUser);
+        List<PostDTO> listpostDTO = new ArrayList<>();
+        for(Post post : postList) {
+            PostDTO postDTO = new PostDTO();
+            postDTO.setId(post.getId());
+            postDTO.setContent(post.getContent());
+            postDTO.setImage(post.getImage());
+            postDTO.setCreate_date(post.getCreate_date());
+            postDTO.setTotal_like(post.getTotal_like());
+            postDTO.setComments(commentService.convertCommentListToDTO(post.getComments()));
+
+            PetToPostDTO petToPostDTO = new PetToPostDTO();
+            if(post.getPet()!=null) {
+                petToPostDTO.setId(post.getPet().getId());
+                petToPostDTO.setName(post.getPet().getName());
+                petToPostDTO.setImage(post.getPet().getImage());
+                postDTO.setPetToPostDTO(petToPostDTO);
+            }else{
+                postDTO.setPetToPostDTO(null);
+            }
+
+            UserPostDTO userPostDTO = new UserPostDTO();
+            userPostDTO.setId(post.getUser().getId());
+            userPostDTO.setName(post.getUser().getName());
+            userPostDTO.setAvatar(post.getUser().getAvatar());
+            postDTO.setUserPostDTO(userPostDTO);
+            List<Reaction> listReaction = reactionRepository.findAll();
+            for(Reaction reaction : listReaction)
+            {
+                if(reaction.getUser().getId() == idUser) {
+                    if(reaction.getPost().getId() == post.getId()) {
+                        postDTO.setFieldReaction(true);
+                    }else{
+                        postDTO.setFieldReaction(false);
+                    }
+                }else{
+                    postDTO.setFieldReaction(false);
+                }
+            }
+            listpostDTO.add(postDTO);
+        }
+        return listpostDTO;
+    }
+
 }

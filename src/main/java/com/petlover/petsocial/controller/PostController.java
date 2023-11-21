@@ -110,7 +110,14 @@ public class PostController {
 
     }
 
-
+    @GetMapping("/getAllYourPostReaction")
+    public ResponseEntity<?> getAllYourPostReaction(@RequestHeader("Authorization") String jwt) throws UserException {
+        ResponseData responseData = new ResponseData();
+        UserDTO userDTO = userService.findUserProfileByJwt(jwt);
+        List<PostDTO> list = postService.getAllYourPostReaction(userDTO.getId());
+        responseData.setData(list);
+        return new ResponseEntity<>(responseData,HttpStatus.OK);
+    }
 
 
 
