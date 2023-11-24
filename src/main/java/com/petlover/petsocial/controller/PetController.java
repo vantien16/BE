@@ -58,16 +58,30 @@ public class PetController {
         responseData.setData(list);
         return new ResponseEntity<>(responseData,HttpStatus.OK);
     }
+    //sửa
     @DeleteMapping ("/delete/{id}")
     public ResponseEntity<?> deletePet(@RequestHeader("Authorization") String jwt,@PathVariable(value = "id") Long id) throws PetException, UserException {
         ResponseData responseData = new ResponseData();
         UserDTO userDTO = userService.findUserProfileByJwt(jwt);
-          PetDTO petDTO = petService.deletePet(id,userDTO);
-          if(petDTO==null){
-              throw new PetException("Not found pet");
-          }
-        responseData.setData(petDTO);
-        return new ResponseEntity<>(responseData,HttpStatus.OK);
+        List<Exchange> exchanges = exchangeService.getAllExchange(userDTO);
+        boolean isExist = false;
+        for (Exchange exchange : exchanges) {
+            if (exchange.getPet().getId().equals(id) && exchange.getStatus().equals(ExStatus.PENDING)) {
+                isExist = true;
+                break;
+            }
+        }
+        if (isExist){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Pet existed in exchange.");
+        }else{
+            PetDTO petDTO = petService.deletePet(id,userDTO);
+            if(petDTO==null){
+                throw new PetException("Not found pet");
+            }
+            responseData.setData(petDTO);
+            return new ResponseEntity<>(responseData,HttpStatus.OK);
+        }
     }
     @GetMapping("/getOnePet/{id}")
     public ResponseEntity<?> getOnePet(@RequestHeader("Authorization") String jwt,@PathVariable(value = "id") Long id) throws UserException, PetException {
