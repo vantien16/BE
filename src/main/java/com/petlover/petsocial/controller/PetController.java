@@ -2,8 +2,11 @@ package com.petlover.petsocial.controller;
 
 import com.petlover.petsocial.exception.PetException;
 import com.petlover.petsocial.exception.UserException;
+import com.petlover.petsocial.model.entity.ExStatus;
+import com.petlover.petsocial.model.entity.Exchange;
 import com.petlover.petsocial.payload.request.*;
 import com.petlover.petsocial.payload.response.ResponseData;
+import com.petlover.petsocial.service.ExchangeService;
 import com.petlover.petsocial.service.PetService;
 import com.petlover.petsocial.service.PetTypeService;
 import com.petlover.petsocial.service.UserService;
@@ -25,6 +28,8 @@ public class PetController {
     PetTypeService petTypeService;
     @Autowired
     PetService petService;
+    @Autowired
+    ExchangeService exchangeService;
     @Autowired
     HttpServletRequest request;
     @Autowired
@@ -58,7 +63,6 @@ public class PetController {
         responseData.setData(list);
         return new ResponseEntity<>(responseData,HttpStatus.OK);
     }
-    //sửa
     @DeleteMapping ("/delete/{id}")
     public ResponseEntity<?> deletePet(@RequestHeader("Authorization") String jwt,@PathVariable(value = "id") Long id) throws PetException, UserException {
         ResponseData responseData = new ResponseData();
@@ -83,6 +87,8 @@ public class PetController {
             return new ResponseEntity<>(responseData,HttpStatus.OK);
         }
     }
+
+
     @GetMapping("/getOnePet/{id}")
     public ResponseEntity<?> getOnePet(@RequestHeader("Authorization") String jwt,@PathVariable(value = "id") Long id) throws UserException, PetException {
         ResponseData responseData = new ResponseData();
