@@ -69,7 +69,7 @@ public class UserServiceImp implements UserService {
         user.setAvatar("https://res.cloudinary.com/dyrprccxf/image/upload/v1699728147/zoaodn4jg4dalzoghhx3.jpg");
         user.setRole("ROLE_USER");
         user.setEnable(false);
-        user.setAvatar("link");
+        //user.setAvatar("link");
         user.setVerificationCode(UUID.randomUUID().toString());
         User newuser = userRepo.save(user);
 
