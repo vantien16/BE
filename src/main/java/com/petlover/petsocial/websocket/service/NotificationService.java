@@ -15,4 +15,11 @@ public class NotificationService {
     public List<Notification> findNotificationOfUser(Long recId){
         return notificationRepository.getNotificationOfUser(recId);
     }
+
+    public void updateStatus(List<Notification> notifications){
+        for (Notification notification : notifications) {
+            notification.setStatus("Seen");
+            notificationRepository.save(notification);
+        }
+    }
 }

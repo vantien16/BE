@@ -2,6 +2,7 @@ package com.petlover.petsocial.websocket.controller;
 
 import com.petlover.petsocial.websocket.domain.Notification;
 import com.petlover.petsocial.websocket.repository.NotificationRepository;
+import com.petlover.petsocial.websocket.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,18 @@ import java.util.List;
 public class NotificationWebController {
 
     @Autowired
-    private NotificationRepository notificationRepository;
+    private NotificationService notificationService;
 
     @GetMapping("/{recId}")
-    public ResponseEntity<List<Notification>> getNotification (@PathVariable Long recId){
-        List<Notification> notificationList = notificationRepository.getNotificationOfUser(recId);
+    public ResponseEntity<List<Notification>> getAndSeenNotification (@PathVariable Long recId){
+        List<Notification> notificationList = notificationService.findNotificationOfUser(recId);
+        notificationService.updateStatus(notificationList);
+        return new ResponseEntity<List<Notification>>(notificationList, HttpStatus.OK);
+    }
+    @GetMapping("/noti/{recId}")
+    public ResponseEntity<List<Notification>> getAllNotification (@PathVariable Long recId){
+        List<Notification> notificationList = notificationService.findNotificationOfUser(recId);
+//        notificationService.updateStatus(notificationList);
         return new ResponseEntity<List<Notification>>(notificationList, HttpStatus.OK);
     }
 }
