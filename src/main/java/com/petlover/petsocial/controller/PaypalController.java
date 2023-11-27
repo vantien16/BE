@@ -41,6 +41,8 @@ public class PaypalController {
     public ResponseEntity<?> payment(@RequestHeader("Authorization") String jwt, @RequestBody OrderDTO order, HttpServletResponse response) {
         try {
             System.out.println("request jwt: " + jwt);
+            System.out.println("price"+order.getPrice());
+            System.out.println("des"+order.getDescription());
             Payment payment = service.createPayment(order.getPrice(), order.getDescription());
             // Store the JWT token associated with the payment ID
             String paymentId = payment.getId();
