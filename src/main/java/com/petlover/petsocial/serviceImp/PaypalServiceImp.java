@@ -34,7 +34,7 @@ public class PaypalServiceImp implements PaypalService {
         Amount amount = new Amount();
         amount.setCurrency("USD");
         total = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        amount.setTotal(String.format("%.2f", total));
+        amount.setTotal(String.format("%.2f", total).replace(",","."));
         System.out.println(total);
 
         Transaction transaction = new Transaction();
